@@ -476,6 +476,22 @@
   }
 }
 
+.pc-caption {
+  background: rgba(0,0,0,0.015);
+  border-radius: 6px;
+  margin: 8px 0 4px 0;
+  padding: 6px 16px;
+  font-weight: 700;
+  color: #333;
+  letter-spacing: 1px;
+  font-size: 0.93rem;
+}
+
+nav, nav *::marker {
+  list-style: none !important;
+  display: initial;
+}
+
 .notification-modal.modal.fade .modal-dialog {
   transform: translate(100%, 0);
 }

@@ -96,29 +96,25 @@
     padding: 10px 24px;
     color: var(--pc-sidebar-color);
     position: relative;
-
     font: {
       size: 14px;
       weight: 400;
     }
-
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
     &:focus,
     &.active,
     &:hover {
       text-decoration: none;
+      background: var(--pc-sidebar-active-color, #f0f0f0);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
   }
 
   .pc-navbar>.pc-item {
     >.pc-link {
       &::before {
-        content: '';
-        position: absolute;
-        top: 0px;
-        right: 0px;
-        left: 0px;
-        bottom: 0px;
-        opacity: 0.05;
+        content: none !important;
       }
     }
 
