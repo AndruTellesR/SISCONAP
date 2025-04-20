@@ -20,7 +20,7 @@
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-end mb-4">
               <h3 class="mb-0"><b>Crear cuenta</b></h3>
-              <a href="#" class="link-primary">¿Ya tienes una cuenta?</a>
+              <a href="#" class="link-primary" id="login-link">¿Ya tienes una cuenta?</a>
             </div>
             <div class="row">
               <div class="col-md-6">
@@ -77,4 +77,16 @@
 </body>
 <!-- [Body] end -->
 
+<script>
+  // Redirección al formulario de login
+  document.addEventListener('DOMContentLoaded', function() {
+    var loginLink = document.getElementById('login-link');
+    if (loginLink) {
+      loginLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.location.href = 'login.html';
+      });
+    }
+  });
+</script>
 </html>
