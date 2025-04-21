@@ -1,0 +1,31 @@
+.pc-item:not(.pc-caption):not(.disabled):hover,
+.pc-item:not(.pc-caption):not(.disabled):focus,
+.pc-item:not(.pc-caption):not(.disabled).active {
+  background-color: #e8f0fe !important;
+  color: #4476f2 !important;
+  border-radius: 8px;
+}
+
+.pc-item:not(.pc-caption):not(.disabled).active .pc-icon,
+.pc-item:not(.pc-caption):not(.disabled):hover .pc-icon,
+.pc-item:not(.pc-caption):not(.disabled):focus .pc-icon {
+  color: #4476f2 !important;
+}
+
+.pc-item:not(.pc-caption):not(.disabled).active .pc-caption,
+.pc-item:not(.pc-caption):not(.disabled):hover .pc-caption,
+.pc-item:not(.pc-caption):not(.disabled):focus .pc-caption {
+  color: #4476f2 !important;
+}
+
+.pc-item:not(.pc-caption):not(.disabled).active .pc-micon,
+.pc-item:not(.pc-caption):not(.disabled):hover .pc-micon,
+.pc-item:not(.pc-caption):not(.disabled):focus .pc-micon {
+  color: #4476f2 !important;
+}
+
+.pc-item:not(.pc-caption):not(.disabled).active .pc-mtext,
+.pc-item:not(.pc-caption):not(.disabled):hover .pc-mtext,
+.pc-item:not(.pc-caption):not(.disabled):focus .pc-mtext {
+  color: #4476f2 !important;
+}
