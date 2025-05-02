@@ -470,15 +470,131 @@
                   <p><span class="badges"></span> Aqui se podria agregar alguna descripcion para el rubro de ser necesaria</p>
                 </div>
                 <div class="card-body pc-component">
+                  <div class="mb-3 d-flex gap-2">
+                    <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#modalRubroPrincipal">Crear Rubro Principal</button>
+                    <button class="btn btn-secondary" type="button" data-bs-toggle="modal" data-bs-target="#modalRubroAuxiliar">Crear Rubro Auxiliar</button>
+                  </div>
+                  <!-- Modal Rubro Principal -->
+                  <div class="modal fade" id="modalRubroPrincipal" tabindex="-1" aria-labelledby="modalRubroPrincipalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="modalRubroPrincipalLabel">Crear Rubro Principal</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <form id="formRubroPrincipal">
+                            <div class="mb-3">
+                              <label for="codigoPrincipal" class="form-label">Código</label>
+                              <input type="text" class="form-control" id="codigoPrincipal" value="2111" readonly>
+                            </div>
+                            <div class="mb-3">
+                              <label for="descripcionPrincipal" class="form-label">Descripción</label>
+                              <input type="text" class="form-control" id="descripcionPrincipal" placeholder="Descripción del rubro principal">
+                            </div>
+                            <div class="mb-3">
+                              <label for="tipoPrincipal" class="form-label">Tipo</label>
+                              <select class="form-select" id="tipoPrincipal">
+                                <option value="P. Ingreso">P. Ingreso</option>
+                                <option value="P. Gasto">P. Gasto</option>
+                              </select>
+                            </div>
+                            <div class="mb-3">
+                              <label for="valorPrincipal" class="form-label">Valor asignado (calculado)</label>
+                              <input type="text" class="form-control" id="valorPrincipal" readonly placeholder="Suma de auxiliares">
+                            </div>
+                          </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                          <button type="button" class="btn btn-primary" id="guardarPrincipal">Guardar</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Modal Rubro Auxiliar -->
+                  <div class="modal fade" id="modalRubroAuxiliar" tabindex="-1" aria-labelledby="modalRubroAuxiliarLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="modalRubroAuxiliarLabel">Crear Rubro Auxiliar</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <form id="formRubroAuxiliar">
+                            <div class="mb-3">
+                              <label for="codigoAuxiliar" class="form-label">Código</label>
+                              <input type="text" class="form-control" id="codigoAuxiliar" placeholder="Ej: 2111-01" required>
+                            </div>
+                            <div class="mb-3">
+                              <label for="descripcionAuxiliar" class="form-label">Descripción</label>
+                              <input type="text" class="form-control" id="descripcionAuxiliar" placeholder="Descripción del rubro auxiliar" required>
+                            </div>
+                            <div class="mb-3">
+                              <label for="tipoAuxiliar" class="form-label">Tipo</label>
+                              <select class="form-select" id="tipoAuxiliar">
+                                <option value="P. Ingreso">P. Ingreso</option>
+                                <option value="P. Gasto">P. Gasto</option>
+                              </select>
+                            </div>
+                            <div class="mb-3">
+                              <label for="valorAuxiliar" class="form-label">Valor asignado</label>
+                              <input type="number" class="form-control" id="valorAuxiliar" min="0" required>
+                            </div>
+                          </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                          <button type="button" class="btn btn-primary" id="guardarAuxiliar">Guardar</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-sm-12">
-              <div class="card">
-                <div class="card-header">
-                  <h5>Display Headings</h5>
-                </div>
-                <div class="card-body pc-component">
+              <div class="col-sm-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h5>Display Headings</h5>
+                  </div>
+                  <div class="card-body pc-component">
+                    <!-- Tabla Unificada de Rubros -->
+                    <div class="mb-4">
+                      <h5 class="mb-2">Rubros Presupuestales</h5>
+                      <table class="table table-bordered table-striped align-middle" id="tablaRubros">
+                        <thead class="table-light">
+                          <tr>
+                            <th>Código</th>
+                            <th>Descripción</th>
+                            <th>Valor</th>
+                            <th>Tipo</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <!--
+                          Ejemplo visual:
+                          <tr class="table-primary fw-bold">
+                            <td colspan="4">2111 - Servicios Generales (Total: $12,000)</td>
+                          </tr>
+                          <tr>
+                            <td>2111-01</td>
+                            <td>Limpieza</td>
+                            <td>$5,000</td>
+                            <td>Auxiliar</td>
+                          </tr>
+                          <tr>
+                            <td>2111-02</td>
+                            <td>Mantenimiento</td>
+                            <td>$7,000</td>
+                            <td>Auxiliar</td>
+                          </tr>
+                          <tr><td colspan="4" style="background:transparent;height:12px;border:none;"></td></tr>
+                          -->
+                          <!-- Aquí se insertarán los rubros principales y auxiliares dinámicamente -->
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -532,29 +648,68 @@
 <script src="../assets/js/pcoded.js"></script>
 <script src="../assets/js/plugins/feather.min.js"></script>
 <script src="../../assets/js/menu-active.js"></script>
+<script>
+// Estructuras en memoria para rubros
+let rubrosPrincipales = [];
+let rubrosAuxiliares = [];
 
+function renderTablaRubros() {
+  const tbody = document.querySelector('#tablaRubros tbody');
+  tbody.innerHTML = '';
+  rubrosPrincipales.forEach(principal => {
+    // Fila de rubro principal
+    const trPrincipal = document.createElement('tr');
+    trPrincipal.className = 'table-primary fw-bold';
+    trPrincipal.innerHTML = `<td colspan="4">${principal.codigo} - ${principal.descripcion} (Total: $${principal.valor}) <span class='badge bg-info ms-2'>${principal.tipo}</span></td>`;
+    tbody.appendChild(trPrincipal);
+    // Filas de auxiliares
+    rubrosAuxiliares.filter(aux => aux.codigo.startsWith(principal.codigo)).forEach(aux => {
+      const trAux = document.createElement('tr');
+      trAux.innerHTML = `<td>${aux.codigo}</td><td>${aux.descripcion}</td><td>$${aux.valor}</td><td>${aux.tipo} (Auxiliar)</td>`;
+      tbody.appendChild(trAux);
+    });
+    // Separador visual
+    const trSep = document.createElement('tr');
+    trSep.innerHTML = `<td colspan="4" style="background:transparent;height:12px;border:none;"></td>`;
+    tbody.appendChild(trSep);
+  });
+}
 
+document.getElementById('guardarPrincipal').onclick = function() {
+  const codigo = document.getElementById('codigoPrincipal').value;
+  const descripcion = document.getElementById('descripcionPrincipal').value;
+  const tipo = document.getElementById('tipoPrincipal').value;
+  // Valor calculado: suma de auxiliares
+  const valor = rubrosAuxiliares.filter(aux => aux.codigo.startsWith(codigo)).reduce((sum, aux) => sum + Number(aux.valor), 0);
+  // Buscar si ya existe
+  const idx = rubrosPrincipales.findIndex(r => r.codigo === codigo);
+  if(idx !== -1) {
+    rubrosPrincipales[idx] = { codigo, descripcion, valor, tipo };
+  } else {
+    rubrosPrincipales.push({ codigo, descripcion, valor, tipo });
+  }
+  renderTablaRubros();
+  document.getElementById('modalRubroPrincipal').querySelector('.btn-close').click();
+};
 
-
-
-<script>layout_change('light');</script>
-
-
-
-
-<script>change_box_container('false');</script>
-
-
-
-<script>layout_rtl_change('false');</script>
-
-
-<script>preset_change("preset-1");</script>
-
-
-<script>font_change("Public-Sans");</script>
-
-
+document.getElementById('guardarAuxiliar').onclick = function() {
+  const codigo = document.getElementById('codigoAuxiliar').value;
+  const descripcion = document.getElementById('descripcionAuxiliar').value;
+  const valor = document.getElementById('valorAuxiliar').value;
+  const tipo = document.getElementById('tipoAuxiliar').value;
+  // Determinar código principal
+  const codigoPrincipal = codigo.split('-')[0];
+  // Agregar auxiliar
+  rubrosAuxiliares.push({ codigo, descripcion, valor, tipo, codigoPrincipal });
+  // Actualizar valor del principal
+  const principal = rubrosPrincipales.find(r => r.codigo === codigoPrincipal);
+  if(principal) {
+    principal.valor = rubrosAuxiliares.filter(aux => aux.codigo.startsWith(codigoPrincipal)).reduce((sum, aux) => sum + Number(aux.valor), 0);
+  }
+  renderTablaRubros();
+  document.getElementById('modalRubroAuxiliar').querySelector('.btn-close').click();
+};
+</script>
 </body>
 <!-- [Body] end -->
 
