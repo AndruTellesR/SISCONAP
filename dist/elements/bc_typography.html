@@ -615,19 +615,20 @@
             <div class="col-sm-12">
               <div class="card">
                 <div class="card-header">
-                  <h3>Adiciones y Disminuciones al Presupuesto</h3>
-                  <p>Realiza adiciones (entrada de nueva plata) o disminuciones (reducción de presupuesto) sobre los rubros auxiliares existentes.</p>
+                  <h3>Adiciones, Disminuciones, Traslados y Aplazamientos</h3>
+                  <p>Gestiona todos los movimientos que afectan el presupuesto: adiciones, disminuciones, traslados (entre rubros) y aplazamientos (dejan saldos quietos).</p>
                 </div>
                 <div class="card-body pc-component">
+                  <!-- Formulario AD -->
                   <form id="formAdicionDisminucion" class="row gy-2 gx-3 align-items-end mb-4">
-                    <div class="col-md-3">
-                      <label for="tipoModAD" class="form-label">Tipo de modificación</label>
+                    <div class="col-md-2">
+                      <label for="tipoModAD" class="form-label">Tipo</label>
                       <select class="form-select" id="tipoModAD" required>
                         <option value="Adición">Adición</option>
                         <option value="Disminución">Disminución</option>
                       </select>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                       <label for="busquedaRubroAux" class="form-label">Buscar Rubro Auxiliar</label>
                       <input type="text" class="form-control" id="busquedaRubroAux" placeholder="Código o descripción del rubro auxiliar">
                       <div class="list-group position-absolute w-100 shadow-sm z-3" id="listaBusquedaRubros" style="max-height:180px;overflow-y:auto;display:none;"></div>
@@ -637,21 +638,68 @@
                       <input type="number" class="form-control" id="montoModAD" min="1" required>
                     </div>
                     <div class="col-md-2">
+                      <label for="soporteAD" class="form-label">Documento soporte</label>
+                      <input type="file" class="form-control" id="soporteAD" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+                    </div>
+                    <div class="col-md-2">
                       <button type="submit" class="btn btn-primary w-100">Registrar</button>
                     </div>
                   </form>
+                  <!-- Formulario Traslado -->
+                  <form id="formTraslado" class="row gy-2 gx-3 align-items-end mb-4 border-top pt-4 mt-4">
+                    <div class="col-md-2">
+                      <label for="origenTraslado" class="form-label">Rubro Origen</label>
+                      <select class="form-select" id="origenTraslado" required></select>
+                    </div>
+                    <div class="col-md-2">
+                      <label for="destinoTraslado" class="form-label">Rubro Destino</label>
+                      <select class="form-select" id="destinoTraslado" required></select>
+                    </div>
+                    <div class="col-md-2">
+                      <label for="montoTraslado" class="form-label">Monto</label>
+                      <input type="number" class="form-control" id="montoTraslado" min="1" required>
+                    </div>
+                    <div class="col-md-3">
+                      <label for="soporteTraslado" class="form-label">Documento soporte</label>
+                      <input type="file" class="form-control" id="soporteTraslado" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+                    </div>
+                    <div class="col-md-3">
+                      <button type="submit" class="btn btn-warning w-100">Registrar Traslado</button>
+                    </div>
+                  </form>
+                  <!-- Formulario Aplazamiento -->
+                  <form id="formAplazamiento" class="row gy-2 gx-3 align-items-end mb-4 border-top pt-4 mt-4">
+                    <div class="col-md-3">
+                      <label for="rubroAplazamiento" class="form-label">Rubro a Aplazar</label>
+                      <select class="form-select" id="rubroAplazamiento" required></select>
+                    </div>
+                    <div class="col-md-2">
+                      <label for="montoAplazamiento" class="form-label">Monto</label>
+                      <input type="number" class="form-control" id="montoAplazamiento" min="1" required>
+                    </div>
+                    <div class="col-md-4">
+                      <label for="soporteAplazamiento" class="form-label">Documento soporte</label>
+                      <input type="file" class="form-control" id="soporteAplazamiento" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+                    </div>
+                    <div class="col-md-3">
+                      <button type="submit" class="btn btn-info w-100">Registrar Aplazamiento</button>
+                    </div>
+                  </form>
+                  <!-- Tabla de modificaciones -->
                   <div class="table-responsive">
                     <table class="table table-bordered align-middle mb-0" id="tablaAdicionesDisminuciones">
                       <thead class="table-light">
                         <tr>
                           <th>Tipo</th>
-                          <th>Rubro Auxiliar</th>
+                          <th>Rubro Origen</th>
+                          <th>Rubro Destino</th>
                           <th>Monto</th>
                           <th>Fecha</th>
+                          <th>Soporte</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <!-- Modificaciones AD se insertan aquí -->
+                        <!-- Modificaciones AD/Traslado/Aplazamiento se insertan aquí -->
                       </tbody>
                     </table>
                   </div>
@@ -876,6 +924,7 @@ formAD.onsubmit = function(e) {
   e.preventDefault();
   const tipo = document.getElementById('tipoModAD').value;
   const monto = Number(document.getElementById('montoModAD').value);
+  const soporte = document.getElementById('soporteAD').files[0];
   if (!rubroAuxSeleccionado) {
     alert('Seleccione un rubro auxiliar válido.');
     return;
@@ -892,31 +941,140 @@ formAD.onsubmit = function(e) {
     } else if (tipo === 'Disminución') {
       rubrosAuxiliares[idx].valor = Math.max(0, Number(rubrosAuxiliares[idx].valor) - monto);
     }
-    // También actualizar el objeto seleccionado para reflejar el nuevo valor
     rubroAuxSeleccionado.valor = rubrosAuxiliares[idx].valor;
   }
   adicionesDisminuciones.push({
     tipo,
-    rubro: { ...rubroAuxSeleccionado },
+    rubroOrigen: { ...rubroAuxSeleccionado },
+    rubroDestino: null,
     monto,
-    fecha: new Date().toLocaleString()
+    fecha: new Date().toLocaleString(),
+    soporte: soporte ? soporte.name : ''
   });
   renderTablaAdicionesDisminuciones();
-  renderTablaRubros(); // <-- Actualiza la tabla principal de rubros
+  renderTablaRubros();
   formAD.reset();
   rubroAuxSeleccionado = null;
+};
+
+// --- Traslados ---
+function llenarSelectRubros(selectId, excludeCodigo = null) {
+  const select = document.getElementById(selectId);
+  select.innerHTML = '<option value="">Seleccione...</option>';
+  rubrosAuxiliares.forEach(rubro => {
+    if (!excludeCodigo || rubro.codigo !== excludeCodigo) {
+      const opt = document.createElement('option');
+      opt.value = rubro.codigo;
+      opt.textContent = `${rubro.codigo} - ${rubro.descripcion}`;
+      select.appendChild(opt);
+    }
+  });
+}
+document.getElementById('origenTraslado').addEventListener('change', function() {
+  llenarSelectRubros('destinoTraslado', this.value);
+});
+llenarSelectRubros('origenTraslado');
+llenarSelectRubros('destinoTraslado');
+
+const formTras = document.getElementById('formTraslado');
+formTras.onsubmit = function(e) {
+  e.preventDefault();
+  const origen = document.getElementById('origenTraslado').value;
+  const destino = document.getElementById('destinoTraslado').value;
+  const monto = Number(document.getElementById('montoTraslado').value);
+  const soporte = document.getElementById('soporteTraslado').files[0];
+  if (!origen || !destino || origen === destino) {
+    alert('Seleccione rubros válidos de origen y destino.');
+    return;
+  }
+  if (!monto || monto <= 0) {
+    alert('Ingrese un monto mayor a cero.');
+    return;
+  }
+  const idxOrigen = rubrosAuxiliares.findIndex(r => r.codigo === origen);
+  const idxDestino = rubrosAuxiliares.findIndex(r => r.codigo === destino);
+  if (idxOrigen === -1 || idxDestino === -1) {
+    alert('Rubros seleccionados no válidos.');
+    return;
+  }
+  if (Number(rubrosAuxiliares[idxOrigen].valor) < monto) {
+    alert('Saldo insuficiente en el rubro de origen.');
+    return;
+  }
+  rubrosAuxiliares[idxOrigen].valor = Number(rubrosAuxiliares[idxOrigen].valor) - monto;
+  rubrosAuxiliares[idxDestino].valor = Number(rubrosAuxiliares[idxDestino].valor) + monto;
+  adicionesDisminuciones.push({
+    tipo: 'Traslado',
+    rubroOrigen: { ...rubrosAuxiliares[idxOrigen] },
+    rubroDestino: { ...rubrosAuxiliares[idxDestino] },
+    monto,
+    fecha: new Date().toLocaleString(),
+    soporte: soporte ? soporte.name : ''
+  });
+  renderTablaAdicionesDisminuciones();
+  renderTablaRubros();
+  formTras.reset();
+};
+
+// --- Aplazamientos ---
+llenarSelectRubros('rubroAplazamiento');
+const formApl = document.getElementById('formAplazamiento');
+formApl.onsubmit = function(e) {
+  e.preventDefault();
+  const rubro = document.getElementById('rubroAplazamiento').value;
+  const monto = Number(document.getElementById('montoAplazamiento').value);
+  const soporte = document.getElementById('soporteAplazamiento').files[0];
+  if (!rubro) {
+    alert('Seleccione un rubro a aplazar.');
+    return;
+  }
+  if (!monto || monto <= 0) {
+    alert('Ingrese un monto mayor a cero.');
+    return;
+  }
+  const idx = rubrosAuxiliares.findIndex(r => r.codigo === rubro);
+  if (idx === -1) {
+    alert('Rubro seleccionado no válido.');
+    return;
+  }
+  if (Number(rubrosAuxiliares[idx].valor) < monto) {
+    alert('Saldo insuficiente para aplazamiento.');
+    return;
+  }
+  // Aquí podrías marcar el monto como "aplazado" (requiere lógica adicional si se desea liberar luego)
+  rubrosAuxiliares[idx].valor = Number(rubrosAuxiliares[idx].valor) - monto;
+  adicionesDisminuciones.push({
+    tipo: 'Aplazamiento',
+    rubroOrigen: { ...rubrosAuxiliares[idx] },
+    rubroDestino: null,
+    monto,
+    fecha: new Date().toLocaleString(),
+    soporte: soporte ? soporte.name : ''
+  });
+  renderTablaAdicionesDisminuciones();
+  renderTablaRubros();
+  formApl.reset();
 };
 
 function renderTablaAdicionesDisminuciones() {
   const tbody = document.querySelector('#tablaAdicionesDisminuciones tbody');
   tbody.innerHTML = '';
   adicionesDisminuciones.forEach(mod => {
+    const rubroOrigen = mod.rubroOrigen ? `${mod.rubroOrigen.codigo} - ${mod.rubroOrigen.descripcion}` : '';
+    const rubroDestino = mod.rubroDestino ? `${mod.rubroDestino.codigo} - ${mod.rubroDestino.descripcion}` : '';
+    const soporte = mod.soporte ? `<a href="#" title="Soporte cargado">${mod.soporte}</a>` : '';
+    const tipoColor = mod.tipo === 'Adición' ? 'success' : mod.tipo === 'Disminución' ? 'danger' : mod.tipo === 'Traslado' ? 'warning' : 'info';
+    const tipoBadge = `<span class='badge bg-${tipoColor}'>${mod.tipo}</span>`;
+    const fecha = mod.fecha || '';
+    const monto = `$${Number(mod.monto).toLocaleString()}`;
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td>${mod.tipo}</td>
-      <td>${mod.rubro.codigo} - ${mod.rubro.descripcion}</td>
-      <td>$${Number(mod.monto).toLocaleString()}</td>
-      <td>${mod.fecha}</td>
+      <td>${tipoBadge}</td>
+      <td>${rubroOrigen}</td>
+      <td>${rubroDestino}</td>
+      <td>${monto}</td>
+      <td>${fecha}</td>
+      <td>${soporte}</td>
     `;
     tbody.appendChild(tr);
   });
@@ -924,6 +1082,7 @@ function renderTablaAdicionesDisminuciones() {
 
 // Render inicial con los valores de ejemplo
 renderTablaRubros();
+renderTablaAdicionesDisminuciones();
 </script>
 </body>
 <!-- [Body] end -->
