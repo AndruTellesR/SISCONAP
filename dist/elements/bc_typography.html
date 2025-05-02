@@ -470,6 +470,11 @@
                   <p><span class="badges"></span> Aqui se podria agregar alguna descripcion para el rubro de ser necesaria</p>
                 </div>
                 <div class="card-body pc-component">
+                  <!-- Mensaje de éxito -->
+                  <div id="alertRubroExito" class="alert alert-success d-none align-items-center gap-2" role="alert" style="display:flex;align-items:center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="#198754" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up-right me-2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                    <span id="mensajeRubroExito">Rubro Creado Con Éxito</span>
+                  </div>
                   <div class="mb-3 d-flex gap-2">
                     <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#modalRubroPrincipal">Crear Rubro Principal</button>
                     <button class="btn btn-secondary" type="button" data-bs-toggle="modal" data-bs-target="#modalRubroAuxiliar">Crear Rubro Auxiliar</button>
@@ -486,7 +491,7 @@
                           <form id="formRubroPrincipal">
                             <div class="mb-3">
                               <label for="codigoPrincipal" class="form-label">Código</label>
-                              <input type="text" class="form-control" id="codigoPrincipal" value="2111" readonly>
+                              <input type="text" class="form-control" id="codigoPrincipal" maxlength="4" pattern="\\d{4}" title="Debe ser un código de 4 dígitos" placeholder="Ej: 2112" required>
                             </div>
                             <div class="mb-3">
                               <label for="descripcionPrincipal" class="form-label">Descripción</label>
@@ -650,22 +655,56 @@
 <script src="../../assets/js/menu-active.js"></script>
 <script>
 // Estructuras en memoria para rubros
-let rubrosPrincipales = [];
-let rubrosAuxiliares = [];
+let rubrosPrincipales = [
+  {
+    codigo: '2112',
+    descripcion: 'SERVICIOS PERSONALES ASOCIADOS A LA NOMINA',
+    valor: 2250000000,
+    tipo: 'P. Gasto'
+  },
+  {
+    codigo: '2113',
+    descripcion: 'ADQUISICIÓN DE SERVICIOS OPERACIONALES',
+    valor: 12327010867,
+    tipo: 'P. Gasto'
+  }
+];
+let rubrosAuxiliares = [
+  {codigo: '211201', descripcion: 'Remuneración de servicios técnicos', valor: 21750635, tipo: 'P. Gasto', codigoPrincipal: '2112'},
+  {codigo: '211202', descripcion: 'Seguridad social salud', valor: 84799733, tipo: 'P. Gasto', codigoPrincipal: '2112'},
+  {codigo: '211203', descripcion: 'Salud Social Pensión', valor: 84799733, tipo: 'P. Gasto', codigoPrincipal: '2112'},
+  {codigo: '211204', descripcion: 'Administración de Riesgos laborales', valor: 7066644, tipo: 'P. Gasto', codigoPrincipal: '2112'},
+  {codigo: '211205', descripcion: 'Cesantías Definitivas', valor: 71058807, tipo: 'P. Gasto', codigoPrincipal: '2112'},
+  {codigo: '211206', descripcion: 'Caja de Compensación familiar', valor: 28266527, tipo: 'P. Gasto', codigoPrincipal: '2112'},
+  {codigo: '211207', descripcion: 'Honorarios y Consultoría', valor: 800000000, tipo: 'P. Gasto', codigoPrincipal: '2112'},
+  {codigo: '211208', descripcion: 'ICBF', valor: 21199933, tipo: 'P. Gasto', codigoPrincipal: '2112'},
+  {codigo: '211209', descripcion: 'SENA', valor: 14133288, tipo: 'P. Gasto', codigoPrincipal: '2112'},
+  {codigo: '211301', descripcion: 'Servicios de Software, infraestructura tecnológica', valor: 1925079918, tipo: 'P. Gasto', codigoPrincipal: '2113'},
+  {codigo: '211302', descripcion: 'Servicios de Software, infraestructura tecnológica y conectividad para instrumentalización registro y conectividad instrumentalización vehículos', valor: 4580698000, tipo: 'P. Gasto', codigoPrincipal: '2113'},
+  {codigo: '211303', descripcion: 'Servicios de Software, infraestructura tecnológica y conectividad para instrumentalización cobro', valor: 3684558000, tipo: 'P. Gasto', codigoPrincipal: '2113'},
+  {codigo: '211304', descripcion: 'Servicios de Software, infraestructura tecnológica y conectividad para instrumentalización sobretasa gasolina a motor', valor: 964000000, tipo: 'P. Gasto', codigoPrincipal: '2113'},
+  {codigo: '211305', descripcion: 'Servicios de Software, infraestructura tecnológica y conectividad para instrumentalización impuesto al consumo', valor: 750000000, tipo: 'P. Gasto', codigoPrincipal: '2113'},
+  {codigo: '211306', descripcion: 'Otros proyectos. Costos operativos por recuperación de cartera y', valor: 422674949, tipo: 'P. Gasto', codigoPrincipal: '2113'},
+];
 
 function renderTablaRubros() {
   const tbody = document.querySelector('#tablaRubros tbody');
   tbody.innerHTML = '';
-  rubrosPrincipales.forEach(principal => {
+  // Ordenar principales y auxiliares por código ascendente
+  const principalesOrdenados = [...rubrosPrincipales].sort((a, b) => a.codigo.localeCompare(b.codigo));
+  const auxiliaresOrdenados = [...rubrosAuxiliares].sort((a, b) => a.codigo.localeCompare(b.codigo));
+  principalesOrdenados.forEach(principal => {
+    // Calcular valor actualizado como suma de auxiliares
+    const valorTotal = auxiliaresOrdenados.filter(aux => aux.codigo.startsWith(principal.codigo)).reduce((sum, aux) => sum + Number(aux.valor), 0) || principal.valor;
     // Fila de rubro principal
     const trPrincipal = document.createElement('tr');
     trPrincipal.className = 'table-primary fw-bold';
-    trPrincipal.innerHTML = `<td colspan="4">${principal.codigo} - ${principal.descripcion} (Total: $${principal.valor}) <span class='badge bg-info ms-2'>${principal.tipo}</span></td>`;
+    trPrincipal.innerHTML = `<td colspan="4">${principal.codigo} - ${principal.descripcion} (Total: $${valorTotal.toLocaleString()}) <span class='badge bg-info ms-2'>${principal.tipo}</span></td>`;
     tbody.appendChild(trPrincipal);
     // Filas de auxiliares
-    rubrosAuxiliares.filter(aux => aux.codigo.startsWith(principal.codigo)).forEach(aux => {
+    auxiliaresOrdenados.filter(aux => aux.codigo.startsWith(principal.codigo)).forEach(aux => {
       const trAux = document.createElement('tr');
-      trAux.innerHTML = `<td>${aux.codigo}</td><td>${aux.descripcion}</td><td>$${aux.valor}</td><td>${aux.tipo} (Auxiliar)</td>`;
+      trAux.innerHTML = `<td>${aux.codigo}</td><td>${aux.descripcion}</td><td>$${Number(aux.valor).toLocaleString()}</td><td>${aux.tipo} (Auxiliar)</td>`;
       tbody.appendChild(trAux);
     });
     // Separador visual
@@ -676,9 +715,14 @@ function renderTablaRubros() {
 }
 
 document.getElementById('guardarPrincipal').onclick = function() {
-  const codigo = document.getElementById('codigoPrincipal').value;
+  const codigo = document.getElementById('codigoPrincipal').value.trim();
   const descripcion = document.getElementById('descripcionPrincipal').value;
   const tipo = document.getElementById('tipoPrincipal').value;
+  // Validación: código debe ser 4 dígitos numéricos
+  if(!/^\d{4}$/.test(codigo)) {
+    mostrarAlertaExito('El código debe ser un número de 4 dígitos');
+    return;
+  }
   // Valor calculado: suma de auxiliares
   const valor = rubrosAuxiliares.filter(aux => aux.codigo.startsWith(codigo)).reduce((sum, aux) => sum + Number(aux.valor), 0);
   // Buscar si ya existe
@@ -690,6 +734,7 @@ document.getElementById('guardarPrincipal').onclick = function() {
   }
   renderTablaRubros();
   document.getElementById('modalRubroPrincipal').querySelector('.btn-close').click();
+  mostrarAlertaExito('Rubro Principal creado con éxito');
 };
 
 document.getElementById('guardarAuxiliar').onclick = function() {
@@ -708,7 +753,28 @@ document.getElementById('guardarAuxiliar').onclick = function() {
   }
   renderTablaRubros();
   document.getElementById('modalRubroAuxiliar').querySelector('.btn-close').click();
+  mostrarAlertaExito('Rubro Auxiliar creado con éxito');
 };
+
+function mostrarAlertaExito(mensaje) {
+  const alertDiv = document.getElementById('alertRubroExito');
+  const mensajeSpan = document.getElementById('mensajeRubroExito');
+  mensajeSpan.textContent = mensaje;
+  alertDiv.classList.remove('d-none');
+  alertDiv.style.opacity = 1;
+  setTimeout(() => {
+    alertDiv.style.transition = 'opacity 0.6s';
+    alertDiv.style.opacity = 0;
+    setTimeout(() => {
+      alertDiv.classList.add('d-none');
+      alertDiv.style.opacity = 1;
+      alertDiv.style.transition = '';
+    }, 600);
+  }, 2000);
+}
+
+// Render inicial con los valores de ejemplo
+renderTablaRubros();
 </script>
 </body>
 <!-- [Body] end -->
