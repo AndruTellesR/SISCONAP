@@ -433,7 +433,7 @@
           <button class="nav-link" id="rubros-tab" data-bs-toggle="tab" data-bs-target="#rubros-tab-pane" type="button" role="tab" aria-controls="rubros-tab-pane" aria-selected="false">Rubros</button>
         </li>
         <li class="nav-item" role="presentation">
-          <button class="nav-link" id="adiciones-disminuciones-tab" data-bs-toggle="tab" data-bs-target="#adiciones-disminuciones-tab-pane" type="button" role="tab" aria-controls="adiciones-disminuciones-tab-pane" aria-selected="false">Adiciones y Disminuciones</button>
+          <button class="nav-link" id="modificaciones-tab" data-bs-toggle="tab" data-bs-target="#modificaciones-tab-pane" type="button" role="tab" aria-controls="modificaciones-tab-pane" aria-selected="false">Modificaciones</button>
         </li>
       </ul>
       <!-- Tabs Nav end -->
@@ -609,6 +609,59 @@
         </div>
         <!-- Rubros Tab Pane end -->
 
+        <!-- Modificaciones Tab Pane start -->
+        <div class="tab-pane fade" id="modificaciones-tab-pane" role="tabpanel" aria-labelledby="modificaciones-tab" tabindex="0">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-header">
+                  <h3>Adiciones y Disminuciones al Presupuesto</h3>
+                  <p>Realiza adiciones (entrada de nueva plata) o disminuciones (reducción de presupuesto) sobre los rubros auxiliares existentes.</p>
+                </div>
+                <div class="card-body pc-component">
+                  <form id="formAdicionDisminucion" class="row gy-2 gx-3 align-items-end mb-4">
+                    <div class="col-md-3">
+                      <label for="tipoModAD" class="form-label">Tipo de modificación</label>
+                      <select class="form-select" id="tipoModAD" required>
+                        <option value="Adición">Adición</option>
+                        <option value="Disminución">Disminución</option>
+                      </select>
+                    </div>
+                    <div class="col-md-5">
+                      <label for="busquedaRubroAux" class="form-label">Buscar Rubro Auxiliar</label>
+                      <input type="text" class="form-control" id="busquedaRubroAux" placeholder="Código o descripción del rubro auxiliar">
+                      <div class="list-group position-absolute w-100 shadow-sm z-3" id="listaBusquedaRubros" style="max-height:180px;overflow-y:auto;display:none;"></div>
+                    </div>
+                    <div class="col-md-2">
+                      <label for="montoModAD" class="form-label">Monto</label>
+                      <input type="number" class="form-control" id="montoModAD" min="1" required>
+                    </div>
+                    <div class="col-md-2">
+                      <button type="submit" class="btn btn-primary w-100">Registrar</button>
+                    </div>
+                  </form>
+                  <div class="table-responsive">
+                    <table class="table table-bordered align-middle mb-0" id="tablaAdicionesDisminuciones">
+                      <thead class="table-light">
+                        <tr>
+                          <th>Tipo</th>
+                          <th>Rubro Auxiliar</th>
+                          <th>Monto</th>
+                          <th>Fecha</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <!-- Modificaciones AD se insertan aquí -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Modificaciones Tab Pane end -->
+
         <!-- Adiciones y Disminuciones Tab Pane start -->
         <div class="tab-pane fade" id="adiciones-disminuciones-tab-pane" role="tabpanel" aria-labelledby="adiciones-disminuciones-tab" tabindex="0">
           <div class="row">
@@ -771,6 +824,102 @@ function mostrarAlertaExito(mensaje) {
       alertDiv.style.transition = '';
     }, 600);
   }, 2000);
+}
+
+// --- Adiciones y Disminuciones sobre rubros auxiliares ---
+let adicionesDisminuciones = [];
+let rubroAuxSeleccionado = null;
+
+const busquedaInput = document.getElementById('busquedaRubroAux');
+const listaBusqueda = document.getElementById('listaBusquedaRubros');
+
+busquedaInput.addEventListener('input', function() {
+  const query = this.value.trim().toLowerCase();
+  listaBusqueda.innerHTML = '';
+  if (!query) {
+    listaBusqueda.style.display = 'none';
+    rubroAuxSeleccionado = null;
+    return;
+  }
+  const resultados = rubrosAuxiliares.filter(rubro =>
+    rubro.codigo.toLowerCase().includes(query) ||
+    rubro.descripcion.toLowerCase().includes(query)
+  );
+  if (resultados.length === 0) {
+    listaBusqueda.style.display = 'none';
+    rubroAuxSeleccionado = null;
+    return;
+  }
+  resultados.forEach(rubro => {
+    const item = document.createElement('button');
+    item.type = 'button';
+    item.className = 'list-group-item list-group-item-action';
+    item.textContent = `${rubro.codigo} - ${rubro.descripcion}`;
+    item.onclick = () => {
+      busquedaInput.value = `${rubro.codigo} - ${rubro.descripcion}`;
+      rubroAuxSeleccionado = rubro;
+      listaBusqueda.style.display = 'none';
+    };
+    listaBusqueda.appendChild(item);
+  });
+  listaBusqueda.style.display = 'block';
+});
+
+// Cierra la lista si se hace click fuera
+busquedaInput.addEventListener('blur', function() {
+  setTimeout(() => { listaBusqueda.style.display = 'none'; }, 200);
+});
+
+// Registrar adición/disminución
+const formAD = document.getElementById('formAdicionDisminucion');
+formAD.onsubmit = function(e) {
+  e.preventDefault();
+  const tipo = document.getElementById('tipoModAD').value;
+  const monto = Number(document.getElementById('montoModAD').value);
+  if (!rubroAuxSeleccionado) {
+    alert('Seleccione un rubro auxiliar válido.');
+    return;
+  }
+  if (!monto || monto <= 0) {
+    alert('Ingrese un monto mayor a cero.');
+    return;
+  }
+  // Modificar el valor del rubro auxiliar
+  const idx = rubrosAuxiliares.findIndex(r => r.codigo === rubroAuxSeleccionado.codigo);
+  if (idx !== -1) {
+    if (tipo === 'Adición') {
+      rubrosAuxiliares[idx].valor = Number(rubrosAuxiliares[idx].valor) + monto;
+    } else if (tipo === 'Disminución') {
+      rubrosAuxiliares[idx].valor = Math.max(0, Number(rubrosAuxiliares[idx].valor) - monto);
+    }
+    // También actualizar el objeto seleccionado para reflejar el nuevo valor
+    rubroAuxSeleccionado.valor = rubrosAuxiliares[idx].valor;
+  }
+  adicionesDisminuciones.push({
+    tipo,
+    rubro: { ...rubroAuxSeleccionado },
+    monto,
+    fecha: new Date().toLocaleString()
+  });
+  renderTablaAdicionesDisminuciones();
+  renderTablaRubros(); // <-- Actualiza la tabla principal de rubros
+  formAD.reset();
+  rubroAuxSeleccionado = null;
+};
+
+function renderTablaAdicionesDisminuciones() {
+  const tbody = document.querySelector('#tablaAdicionesDisminuciones tbody');
+  tbody.innerHTML = '';
+  adicionesDisminuciones.forEach(mod => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${mod.tipo}</td>
+      <td>${mod.rubro.codigo} - ${mod.rubro.descripcion}</td>
+      <td>$${Number(mod.monto).toLocaleString()}</td>
+      <td>${mod.fecha}</td>
+    `;
+    tbody.appendChild(tr);
+  });
 }
 
 // Render inicial con los valores de ejemplo
