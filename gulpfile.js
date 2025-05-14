@@ -51,7 +51,6 @@ gulp.task("build", function () {
       "node_modules/simplebar/dist/simplebar.min.js",
       "node_modules/feather-icons/dist/feather.min.js",
       "node_modules/clipboard/dist/clipboard.min.js",
-      "node_modules/apexcharts/dist/apexcharts.min.js",
       "node_modules/prismjs/prism.js",
       "node_modules/sweetalert2/dist/sweetalert2.all.min.js",
       "node_modules/vanillajs-datepicker/dist/js/datepicker-full.min.js",
@@ -67,10 +66,7 @@ gulp.task("build", function () {
       "node_modules/wnumb/wNumb.min.js",
       "node_modules/bootstrap-switch-button/dist/bootstrap-switch-button.min.js",
       "node_modules/type-ahead/src/type-ahead.min.js",
-      "node_modules/simplemde/dist/simplemde.min.js",
-      "node_modules/quill/dist/quill.min.js",
       "node_modules/dropzone/dist/min/dropzone-amd-module.min.js",
-      "node_modules/uppy/dist/uppy.min.js",
       "node_modules/formbouncerjs/dist/bouncer.min.js",
       "node_modules/croppr/dist/croppr.min.js",
       "node_modules/simple-datatables/dist/umd/simple-datatables.js",
@@ -94,9 +90,7 @@ gulp.task("build", function () {
       "node_modules/datatables.net-buttons/js/buttons.print.min.js",
       "node_modules/datatables.net-buttons/js/buttons.html5.min.js",
       "node_modules/datatables.net-rowreorder/js/dataTables.rowReorder.min.js",
-      "node_modules/pdfmake/build/pdfmake.min.js",
       "node_modules/jszip/dist/jszip.min.js",
-      "node_modules/pdfmake/build/vfs_fonts.js",
       "node_modules/dragula/dist/dragula.min.js",
       "node_modules/fullcalendar/index.global.min.js",
       "node_modules/wow.js/dist/wow.min.js",
@@ -119,12 +113,7 @@ gulp.task("build", function () {
       "node_modules/flatpickr/dist/flatpickr.min.css",
       "node_modules/nouislider/dist/nouislider.min.css",
       "node_modules/bootstrap-switch-button/css/bootstrap-switch-button.min.css",
-      "node_modules/simplemde/dist/simplemde.min.css",
-      "node_modules/quill/dist/quill.core.css",
-      "node_modules/quill/dist/quill.snow.css",
-      "node_modules/quill/dist/quill.bubble.css",
       "node_modules/dropzone/dist/min/dropzone.min.css",
-      "node_modules/uppy/dist/uppy.min.css",
       "node_modules/croppr/dist/croppr.min.css",
       "node_modules/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css",
       "node_modules/datatables.net-fixedcolumns-bs5/css/fixedColumns.bootstrap5.min.css",
@@ -180,14 +169,14 @@ gulp.task("build", function () {
   var cpyassets = gulp
     .src(["src/assets/**/*.*", "!src/assets/scss/**/*.*"])
     .pipe(gulp.dest("dist/assets"));
-  var cpytinymceassets = gulp
-    .src(["node_modules/tinymce/**/*.*"])
-    .pipe(gulp.dest("dist/assets/js/plugins/tinymce"));
+  // var cpytinymceassets = gulp
+  //   .src(["node_modules/tinymce/**/*.*"])
+  //   .pipe(gulp.dest("dist/assets/js/plugins/tinymce"));
 
   var cpytrumbowygassets = gulp
     .src(["node_modules/trumbowyg/dist/**/*.*"])
     .pipe(gulp.dest("dist/assets/js/plugins/trumbowyg"));
-  return merge(cpyassets, cpytinymceassets, cpytrumbowygassets);
+  return merge(cpyassets, cpytrumbowygassets); // cpytinymceassets removed from merge
 });
 //  [ Copy assets ] end
 
