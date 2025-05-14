@@ -138,34 +138,34 @@ gulp.task("build", function () {
       gulp.src(assets).pipe(gulp.dest("dist/assets/js/plugins"));
     }
   });
-  var required_libs = {
-    classic: [
-      "node_modules/@ckeditor/ckeditor5-build-classic/build/ckeditor.js",
-    ],
-    inline: [
-      "node_modules/@ckeditor/ckeditor5-build-inline/build/ckeditor.js",
-    ],
-    balloon: [
-      "node_modules/@ckeditor/ckeditor5-build-balloon/build/ckeditor.js",
-    ],
-    document: [
-      "node_modules/@ckeditor/ckeditor5-build-decoupled-document/build/ckeditor.js",
-    ],
-  };
-  npmlodash(required_libs).forEach(function (assets, type) {
-    if (type == "classic") {
-      gulp.src(assets).pipe(gulp.dest("dist/assets/js/plugins/ckeditor/classic"));
-    }
-    if (type == "inline") {
-      gulp.src(assets).pipe(gulp.dest("dist/assets/js/plugins/ckeditor/inline"));
-    }
-    if (type == "balloon") {
-      gulp.src(assets).pipe(gulp.dest("dist/assets/js/plugins/ckeditor/balloon"));
-    }
-    if (type == "document") {
-      gulp.src(assets).pipe(gulp.dest("dist/assets/js/plugins/ckeditor/document"));
-    }
-  });
+  // var required_libs = {
+  //   classic: [
+  //     "node_modules/@ckeditor/ckeditor5-build-classic/build/ckeditor.js",
+  //   ],
+  //   inline: [
+  //     "node_modules/@ckeditor/ckeditor5-build-inline/build/ckeditor.js",
+  //   ],
+  //   balloon: [
+  //     "node_modules/@ckeditor/ckeditor5-build-balloon/build/ckeditor.js",
+  //   ],
+  //   document: [
+  //     "node_modules/@ckeditor/ckeditor5-build-decoupled-document/build/ckeditor.js",
+  //   ],
+  // };
+  // npmlodash(required_libs).forEach(function (assets, type) {
+  //   if (type == "classic") {
+  //     gulp.src(assets).pipe(gulp.dest("dist/assets/js/plugins/ckeditor/classic"));
+  //   }
+  //   if (type == "inline") {
+  //     gulp.src(assets).pipe(gulp.dest("dist/assets/js/plugins/ckeditor/inline"));
+  //   }
+  //   if (type == "balloon") {
+  //     gulp.src(assets).pipe(gulp.dest("dist/assets/js/plugins/ckeditor/balloon"));
+  //   }
+  //   if (type == "document") {
+  //     gulp.src(assets).pipe(gulp.dest("dist/assets/js/plugins/ckeditor/document"));
+  //   }
+  // });
   var cpyassets = gulp
     .src(["src/assets/**/*.*", "!src/assets/scss/**/*.*"])
     .pipe(gulp.dest("dist/assets"));
