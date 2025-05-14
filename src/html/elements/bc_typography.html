@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- [Head] start -->
+
+<head>
+  @@include('../layouts/head-page-meta.html', {'title': 'Typography'}) @@include('../layouts/head-css.html')
+</head>
+<!-- [Head] end -->
+<!-- [Body] Start -->
+
+<body @@bodySetup>
+  @@include('../layouts/layout-vertical.html')
+
+  <!-- [ Main Content ] start -->
+  <div class="pc-container">
+    <div class="pc-content">
+      @@include('../layouts/breadcrumb.html', {'breadcrumb-item': 'UI Components', 'breadcrumb-item-active': 'Typography'})
+
+      <!-- Tabs Nav start -->
+      <ul class="nav nav-tabs mb-3" id="presupuestoTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="presupuesto-tab" data-bs-toggle="tab" data-bs-target="#presupuesto-tab-pane" type="button" role="tab" aria-controls="presupuesto-tab-pane" aria-selected="true">Presupuesto</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="rubros-tab" data-bs-toggle="tab" data-bs-target="#rubros-tab-pane" type="button" role="tab" aria-controls="rubros-tab-pane" aria-selected="false">Rubros</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="adiciones-disminuciones-tab" data-bs-toggle="tab" data-bs-target="#adiciones-disminuciones-tab-pane" type="button" role="tab" aria-controls="adiciones-disminuciones-tab-pane" aria-selected="false">Adiciones y Disminuciones</button>
+        </li>
+      </ul>
+      <!-- Tabs Nav end -->
+
+      <!-- Tabs Content start -->
+      <div class="tab-content" id="presupuestoTabsContent">
+        <!-- Presupuesto Tab Pane start -->
+        <div class="tab-pane fade show active" id="presupuesto-tab-pane" role="tabpanel" aria-labelledby="presupuesto-tab" tabindex="0">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-header">
+                  <h3>Presupuesto</h3>
+                </div>
+                <div class="card-body">
+                  <p>Aquí irá el contenido específico para la pestaña Presupuesto.</p>
+                  <!-- Contenido placeholder para Presupuesto -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Presupuesto Tab Pane end -->
+
+        <!-- Rubros Tab Pane start -->
+        <div class="tab-pane fade" id="rubros-tab-pane" role="tabpanel" aria-labelledby="rubros-tab" tabindex="0">
+          <!-- [ Main Content ] start -->
+          <div class="row">
+            <!-- [ Typography ] start -->
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-header">
+                  <h3>Rubro</h3>
+                  <p><span class="badges"></span> Aqui se podria agregar alguna descripcion para el rubro de ser necesaria</p>
+                </div>
+                <div class="card-body pc-component">
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-header">
+                  <h5>Display Headings</h5>
+                </div>
+                <div class="card-body pc-component">
+                </div>
+              </div>
+            </div>
+            <!-- [ Typography ] end -->
+          </div>
+          <!-- [ Main Content ] end -->
+        </div>
+        <!-- Rubros Tab Pane end -->
+
+        <!-- Adiciones y Disminuciones Tab Pane start -->
+        <div class="tab-pane fade" id="adiciones-disminuciones-tab-pane" role="tabpanel" aria-labelledby="adiciones-disminuciones-tab" tabindex="0">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-header">
+                  <h3>Adiciones y Disminuciones</h3>
+                </div>
+                <div class="card-body">
+                  <p>Aquí se mostrarán las adiciones y disminuciones del presupuesto.</p>
+                  <!-- Puedes duplicar o añadir nueva estructura aquí -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Adiciones y Disminuciones Tab Pane end -->
+      </div>
+      <!-- Tabs Content end -->
+
+    </div>
+  </div>
+  <!-- [ Main Content ] end -->
+  @@include('../layouts/footer-block.html') @@include('../layouts/footer-js.html')
+</body>
+<!-- [Body] end -->
+
+</html>
