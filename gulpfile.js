@@ -70,7 +70,7 @@ gulp.task("build", function () {
       "node_modules/formbouncerjs/dist/bouncer.min.js",
       "node_modules/croppr/dist/croppr.min.js",
       "node_modules/simple-datatables/dist/umd/simple-datatables.js",
-      "node_modules/simple-datatables/docs/demos/dist/module.js",
+      // "node_modules/simple-datatables/docs/demos/dist/module.js",
       "node_modules/datatables.net/js/jquery.dataTables.min.js",
       "node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js",
       "node_modules/datatables.net-select/js/dataTables.select.min.js",
@@ -96,9 +96,9 @@ gulp.task("build", function () {
       "node_modules/wow.js/dist/wow.min.js",
       "node_modules/isotope-layout/dist/isotope.pkgd.min.js",
       "node_modules/fslightbox/index.js",
-      "node_modules/jsvectormap/dist/js/jsvectormap.min.js",
-      "node_modules/jsvectormap/dist/maps/world.js",
-      "node_modules/jsvectormap/dist/maps/world-merc.js"
+      // "node_modules/jsvectormap/dist/js/jsvectormap.min.js",
+      // "node_modules/jsvectormap/dist/maps/world.js",
+      // "node_modules/jsvectormap/dist/maps/world-merc.js"
     ],
     css: [
       "node_modules/bootstrap/dist/css/bootstrap.min.css",
@@ -128,7 +128,7 @@ gulp.task("build", function () {
       "node_modules/datatables.net-rowreorder-bs5/css/rowReorder.bootstrap5.min.css",
       "node_modules/dragula/dist/dragula.min.css",
       "node_modules/simple-datatables/dist/style.css",
-      "node_modules/jsvectormap/dist/css/jsvectormap.min.css"
+      // "node_modules/jsvectormap/dist/css/jsvectormap.min.css"
     ],
   };
   npmlodash(required_libs).forEach(function (assets, type) {
