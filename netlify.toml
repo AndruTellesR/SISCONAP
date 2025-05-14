@@ -1,0 +1,7 @@
+[build]
+  command = "gulp"
+  publish = "dist/"
+
+# Opcional: Especifica la versión de Node.js si es necesario para Gulp o sus plugins
+# [build.environment]
+#   NODE_VERSION = "18"

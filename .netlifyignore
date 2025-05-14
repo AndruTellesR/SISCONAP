@@ -1,0 +1,15 @@
+# Ignore directories and files not needed for Netlify frontend build
+
+# Git directory
+.git/
+
+# Node modules (should be installed by Netlify build if needed, or not needed if already built)
+node_modules/
+
+# Backend specific directory
+backend/
+
+# Other common files/dirs to ignore for frontend-only deploys
+.vscode/
+README.md
+# Add any other project-specific files/dirs that are not part of the frontend build output
