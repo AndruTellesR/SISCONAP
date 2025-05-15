@@ -1,0 +1,9 @@
+{
+  "buildCommand": "npm install && npx gulp build",
+  "startCommand": "npx gulp",
+  "rootDirectory": ".",
+  "publishDirectory": "dist",
+  "env": {
+    "NODE_VERSION": "18"
+  }
+}
