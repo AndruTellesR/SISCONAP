@@ -104,6 +104,71 @@
   </div>
   <!-- [ Main Content ] end -->
   @@include('../layouts/footer-block.html') @@include('../layouts/footer-js.html')
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // --- Lógica para el Modal de Rubro Principal ---
+    const modalPrincipal = document.getElementById('modalRubroPrincipal');
+    if (modalPrincipal) {
+        const codigoPrincipalInput = document.getElementById('codigoPrincipal');
+        const descripcionPrincipalInput = document.getElementById('descripcionPrincipal');
+        const tipoPrincipalSelect = document.getElementById('tipoPrincipal');
+        const principalStorageKey = 'formRubroPrincipalData';
+
+        modalPrincipal.addEventListener('hidden.bs.modal', function () {
+            const data = {
+                codigo: codigoPrincipalInput ? codigoPrincipalInput.value : '',
+                descripcion: descripcionPrincipalInput ? descripcionPrincipalInput.value : '',
+                tipo: tipoPrincipalSelect ? tipoPrincipalSelect.value : ''
+            };
+            sessionStorage.setItem(principalStorageKey, JSON.stringify(data));
+        });
+
+        modalPrincipal.addEventListener('show.bs.modal', function () {
+            const savedData = sessionStorage.getItem(principalStorageKey);
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                if (codigoPrincipalInput) codigoPrincipalInput.value = data.codigo || '';
+                if (descripcionPrincipalInput) descripcionPrincipalInput.value = data.descripcion || '';
+                if (tipoPrincipalSelect) tipoPrincipalSelect.value = data.tipo || '';
+            }
+        });
+    }
+
+    // --- Lógica para el Modal de Rubro Auxiliar ---
+    const modalAuxiliar = document.getElementById('modalRubroAuxiliar');
+    if (modalAuxiliar) {
+        // Asegúrate de que estos IDs coincidan con los de tu formulario de Rubro Auxiliar
+        const codigoAuxiliarInput = document.getElementById('codigoAuxiliar'); 
+        const descripcionAuxiliarInput = document.getElementById('descripcionAuxiliar');
+        const tipoAuxiliarSelect = document.getElementById('tipoAuxiliar');
+        const rubroPrincipalAsociadoSelect = document.getElementById('rubroPrincipalAsociado'); // Si tienes un selector para el rubro principal
+        const auxiliarStorageKey = 'formRubroAuxiliarData';
+
+        modalAuxiliar.addEventListener('hidden.bs.modal', function () {
+            const data = {
+                codigo: codigoAuxiliarInput ? codigoAuxiliarInput.value : '',
+                descripcion: descripcionAuxiliarInput ? descripcionAuxiliarInput.value : '',
+                tipo: tipoAuxiliarSelect ? tipoAuxiliarSelect.value : '',
+                rubroPrincipal: rubroPrincipalAsociadoSelect ? rubroPrincipalAsociadoSelect.value : ''
+            };
+            sessionStorage.setItem(auxiliarStorageKey, JSON.stringify(data));
+        });
+
+        modalAuxiliar.addEventListener('show.bs.modal', function () {
+            const savedData = sessionStorage.getItem(auxiliarStorageKey);
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                if (codigoAuxiliarInput) codigoAuxiliarInput.value = data.codigo || '';
+                if (descripcionAuxiliarInput) descripcionAuxiliarInput.value = data.descripcion || '';
+                if (tipoAuxiliarSelect) tipoAuxiliarSelect.value = data.tipo || '';
+                if (rubroPrincipalAsociadoSelect) rubroPrincipalAsociadoSelect.value = data.rubroPrincipal || '';
+            }
+        });
+    }
+});
+</script>
+
 </body>
 <!-- [Body] end -->
 

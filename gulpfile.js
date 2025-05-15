@@ -44,6 +44,8 @@ gulp.task("sass", function () {
 
 //  [ Copy assets ] start
 gulp.task("build", function () {
+  let allStreams = []; // Initialize an array to collect all streams
+
   var required_libs = {
     js: [
       "node_modules/bootstrap/dist/js/bootstrap.min.js",
@@ -51,6 +53,7 @@ gulp.task("build", function () {
       "node_modules/simplebar/dist/simplebar.min.js",
       "node_modules/feather-icons/dist/feather.min.js",
       "node_modules/clipboard/dist/clipboard.min.js",
+      "node_modules/apexcharts/dist/apexcharts.min.js",
       "node_modules/prismjs/prism.js",
       "node_modules/sweetalert2/dist/sweetalert2.all.min.js",
       "node_modules/vanillajs-datepicker/dist/js/datepicker-full.min.js",
@@ -66,11 +69,14 @@ gulp.task("build", function () {
       "node_modules/wnumb/wNumb.min.js",
       "node_modules/bootstrap-switch-button/dist/bootstrap-switch-button.min.js",
       "node_modules/type-ahead/src/type-ahead.min.js",
+      "node_modules/simplemde/dist/simplemde.min.js",
+      "node_modules/quill/dist/quill.min.js",
       "node_modules/dropzone/dist/min/dropzone-amd-module.min.js",
+      "node_modules/uppy/dist/uppy.min.js",
       "node_modules/formbouncerjs/dist/bouncer.min.js",
       "node_modules/croppr/dist/croppr.min.js",
       "node_modules/simple-datatables/dist/umd/simple-datatables.js",
-      // "node_modules/simple-datatables/docs/demos/dist/module.js",
+      "node_modules/simple-datatables/docs/demos/dist/module.js",
       "node_modules/datatables.net/js/jquery.dataTables.min.js",
       "node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js",
       "node_modules/datatables.net-select/js/dataTables.select.min.js",
@@ -90,15 +96,17 @@ gulp.task("build", function () {
       "node_modules/datatables.net-buttons/js/buttons.print.min.js",
       "node_modules/datatables.net-buttons/js/buttons.html5.min.js",
       "node_modules/datatables.net-rowreorder/js/dataTables.rowReorder.min.js",
+      "node_modules/pdfmake/build/pdfmake.min.js",
       "node_modules/jszip/dist/jszip.min.js",
+      "node_modules/pdfmake/build/vfs_fonts.js",
       "node_modules/dragula/dist/dragula.min.js",
       "node_modules/fullcalendar/index.global.min.js",
       "node_modules/wow.js/dist/wow.min.js",
       "node_modules/isotope-layout/dist/isotope.pkgd.min.js",
       "node_modules/fslightbox/index.js",
-      // "node_modules/jsvectormap/dist/js/jsvectormap.min.js",
-      // "node_modules/jsvectormap/dist/maps/world.js",
-      // "node_modules/jsvectormap/dist/maps/world-merc.js"
+      "node_modules/jsvectormap/dist/js/jsvectormap.min.js",
+      "node_modules/jsvectormap/dist/maps/world.js",
+      "node_modules/jsvectormap/dist/maps/world-merc.js"
     ],
     css: [
       "node_modules/bootstrap/dist/css/bootstrap.min.css",
@@ -113,7 +121,12 @@ gulp.task("build", function () {
       "node_modules/flatpickr/dist/flatpickr.min.css",
       "node_modules/nouislider/dist/nouislider.min.css",
       "node_modules/bootstrap-switch-button/css/bootstrap-switch-button.min.css",
+      "node_modules/simplemde/dist/simplemde.min.css",
+      "node_modules/quill/dist/quill.core.css",
+      "node_modules/quill/dist/quill.snow.css",
+      "node_modules/quill/dist/quill.bubble.css",
       "node_modules/dropzone/dist/min/dropzone.min.css",
+      "node_modules/uppy/dist/uppy.min.css",
       "node_modules/croppr/dist/croppr.min.css",
       "node_modules/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css",
       "node_modules/datatables.net-fixedcolumns-bs5/css/fixedColumns.bootstrap5.min.css",
@@ -128,55 +141,60 @@ gulp.task("build", function () {
       "node_modules/datatables.net-rowreorder-bs5/css/rowReorder.bootstrap5.min.css",
       "node_modules/dragula/dist/dragula.min.css",
       "node_modules/simple-datatables/dist/style.css",
-      // "node_modules/jsvectormap/dist/css/jsvectormap.min.css"
+      "node_modules/jsvectormap/dist/css/jsvectormap.min.css"
     ],
   };
   npmlodash(required_libs).forEach(function (assets, type) {
     if (type == "css") {
-      gulp.src(assets).pipe(gulp.dest("dist/assets/css/plugins"));
+      allStreams.push(gulp.src(assets).pipe(gulp.dest("dist/assets/css/plugins")));
     } else {
-      gulp.src(assets).pipe(gulp.dest("dist/assets/js/plugins"));
+      allStreams.push(gulp.src(assets).pipe(gulp.dest("dist/assets/js/plugins")));
     }
   });
-  // var required_libs = {
-  //   classic: [
-  //     "node_modules/@ckeditor/ckeditor5-build-classic/build/ckeditor.js",
-  //   ],
-  //   inline: [
-  //     "node_modules/@ckeditor/ckeditor5-build-inline/build/ckeditor.js",
-  //   ],
-  //   balloon: [
-  //     "node_modules/@ckeditor/ckeditor5-build-balloon/build/ckeditor.js",
-  //   ],
-  //   document: [
-  //     "node_modules/@ckeditor/ckeditor5-build-decoupled-document/build/ckeditor.js",
-  //   ],
-  // };
-  // npmlodash(required_libs).forEach(function (assets, type) {
-  //   if (type == "classic") {
-  //     gulp.src(assets).pipe(gulp.dest("dist/assets/js/plugins/ckeditor/classic"));
-  //   }
-  //   if (type == "inline") {
-  //     gulp.src(assets).pipe(gulp.dest("dist/assets/js/plugins/ckeditor/inline"));
-  //   }
-  //   if (type == "balloon") {
-  //     gulp.src(assets).pipe(gulp.dest("dist/assets/js/plugins/ckeditor/balloon"));
-  //   }
-  //   if (type == "document") {
-  //     gulp.src(assets).pipe(gulp.dest("dist/assets/js/plugins/ckeditor/document"));
-  //   }
-  // });
+  required_libs = { // Note: This re-assigns required_libs, as in the original code
+    classic: [
+      "node_modules/@ckeditor/ckeditor5-build-classic/build/ckeditor.js",
+    ],
+    inline: [
+      "node_modules/@ckeditor/ckeditor5-build-inline/build/ckeditor.js",
+    ],
+    balloon: [
+      "node_modules/@ckeditor/ckeditor5-build-balloon/build/ckeditor.js",
+    ],
+    document: [
+      "node_modules/@ckeditor/ckeditor5-build-decoupled-document/build/ckeditor.js",
+    ],
+  };
+  npmlodash(required_libs).forEach(function (assets, type) {
+    if (type == "classic") {
+      allStreams.push(gulp.src(assets).pipe(gulp.dest("dist/assets/js/plugins/ckeditor/classic")));
+    }
+    if (type == "inline") {
+      allStreams.push(gulp.src(assets).pipe(gulp.dest("dist/assets/js/plugins/ckeditor/inline")));
+    }
+    if (type == "balloon") {
+      allStreams.push(gulp.src(assets).pipe(gulp.dest("dist/assets/js/plugins/ckeditor/balloon")));
+    }
+    if (type == "document") {
+      allStreams.push(gulp.src(assets).pipe(gulp.dest("dist/assets/js/plugins/ckeditor/document")));
+    }
+  });
   var cpyassets = gulp
     .src(["src/assets/**/*.*", "!src/assets/scss/**/*.*"])
     .pipe(gulp.dest("dist/assets"));
-  // var cpytinymceassets = gulp
-  //   .src(["node_modules/tinymce/**/*.*"])
-  //   .pipe(gulp.dest("dist/assets/js/plugins/tinymce"));
+  allStreams.push(cpyassets);
+
+  var cpytinymceassets = gulp
+    .src(["node_modules/tinymce/**/*.*"])
+    .pipe(gulp.dest("dist/assets/js/plugins/tinymce"));
+  allStreams.push(cpytinymceassets);
 
   var cpytrumbowygassets = gulp
     .src(["node_modules/trumbowyg/dist/**/*.*"])
     .pipe(gulp.dest("dist/assets/js/plugins/trumbowyg"));
-  return merge(cpyassets, cpytrumbowygassets); // cpytinymceassets removed from merge
+  allStreams.push(cpytrumbowygassets);
+  
+  return merge(allStreams);
 });
 //  [ Copy assets ] end
 

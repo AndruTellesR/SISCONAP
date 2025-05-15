@@ -433,7 +433,7 @@
           <button class="nav-link" id="rubros-tab" data-bs-toggle="tab" data-bs-target="#rubros-tab-pane" type="button" role="tab" aria-controls="rubros-tab-pane" aria-selected="false">Rubros</button>
         </li>
         <li class="nav-item" role="presentation">
-          <button class="nav-link" id="adiciones-disminuciones-tab" data-bs-toggle="tab" data-bs-target="#adiciones-disminuciones-tab-pane" type="button" role="tab" aria-controls="adiciones-disminuciones-tab-pane" aria-selected="false">Adiciones y Disminuciones</button>
+          <button class="nav-link" id="modificaciones-tab" data-bs-toggle="tab" data-bs-target="#modificaciones-tab-pane" type="button" role="tab" aria-controls="modificaciones-tab-pane" aria-selected="false">Modificaciones</button>
         </li>
       </ul>
       <!-- Tabs Nav end -->
@@ -470,15 +470,136 @@
                   <p><span class="badges"></span> Aqui se podria agregar alguna descripcion para el rubro de ser necesaria</p>
                 </div>
                 <div class="card-body pc-component">
+                  <!-- Mensaje de éxito -->
+                  <div id="alertRubroExito" class="alert alert-success d-none align-items-center gap-2" role="alert" style="display:flex;align-items:center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="#198754" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up-right me-2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                    <span id="mensajeRubroExito">Rubro Creado Con Éxito</span>
+                  </div>
+                  <div class="mb-3 d-flex gap-2">
+                    <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#modalRubroPrincipal">Crear Rubro Principal</button>
+                    <button class="btn btn-secondary" type="button" data-bs-toggle="modal" data-bs-target="#modalRubroAuxiliar">Crear Rubro Auxiliar</button>
+                  </div>
+                  <!-- Modal Rubro Principal -->
+                  <div class="modal fade" id="modalRubroPrincipal" tabindex="-1" aria-labelledby="modalRubroPrincipalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="modalRubroPrincipalLabel">Crear Rubro Principal</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <form id="formRubroPrincipal">
+                            <div class="mb-3">
+                              <label for="codigoPrincipal" class="form-label">Código</label>
+                              <input type="text" class="form-control" id="codigoPrincipal" maxlength="4" pattern="\\d{4}" title="Debe ser un código de 4 dígitos" placeholder="Ej: 2112" required>
+                            </div>
+                            <div class="mb-3">
+                              <label for="descripcionPrincipal" class="form-label">Descripción</label>
+                              <input type="text" class="form-control" id="descripcionPrincipal" placeholder="Descripción del rubro principal">
+                            </div>
+                            <div class="mb-3">
+                              <label for="tipoPrincipal" class="form-label">Tipo</label>
+                              <select class="form-select" id="tipoPrincipal">
+                                <option value="P. Ingreso">P. Ingreso</option>
+                                <option value="P. Gasto">P. Gasto</option>
+                              </select>
+                            </div>
+                            <div class="mb-3">
+                              <label for="valorPrincipal" class="form-label">Valor asignado (calculado)</label>
+                              <input type="text" class="form-control" id="valorPrincipal" readonly placeholder="Suma de auxiliares">
+                            </div>
+                          </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                          <button type="button" class="btn btn-primary" id="guardarPrincipal">Guardar</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Modal Rubro Auxiliar -->
+                  <div class="modal fade" id="modalRubroAuxiliar" tabindex="-1" aria-labelledby="modalRubroAuxiliarLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="modalRubroAuxiliarLabel">Crear Rubro Auxiliar</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <form id="formRubroAuxiliar">
+                            <div class="mb-3">
+                              <label for="codigoAuxiliar" class="form-label">Código</label>
+                              <input type="text" class="form-control" id="codigoAuxiliar" placeholder="Ej: 2111-01" required>
+                            </div>
+                            <div class="mb-3">
+                              <label for="descripcionAuxiliar" class="form-label">Descripción</label>
+                              <input type="text" class="form-control" id="descripcionAuxiliar" placeholder="Descripción del rubro auxiliar" required>
+                            </div>
+                            <div class="mb-3">
+                              <label for="tipoAuxiliar" class="form-label">Tipo</label>
+                              <select class="form-select" id="tipoAuxiliar">
+                                <option value="P. Ingreso">P. Ingreso</option>
+                                <option value="P. Gasto">P. Gasto</option>
+                              </select>
+                            </div>
+                            <div class="mb-3">
+                              <label for="valorAuxiliar" class="form-label">Valor asignado</label>
+                              <input type="number" class="form-control" id="valorAuxiliar" min="0" required>
+                            </div>
+                          </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                          <button type="button" class="btn btn-primary" id="guardarAuxiliar">Guardar</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-sm-12">
-              <div class="card">
-                <div class="card-header">
-                  <h5>Display Headings</h5>
-                </div>
-                <div class="card-body pc-component">
+              <div class="col-sm-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h5>Display Headings</h5>
+                  </div>
+                  <div class="card-body pc-component">
+                    <!-- Tabla Unificada de Rubros -->
+                    <div class="mb-4">
+                      <h5 class="mb-2">Rubros Presupuestales</h5>
+                      <table class="table table-bordered table-striped align-middle" id="tablaRubros">
+                        <thead class="table-light">
+                          <tr>
+                            <th>Código</th>
+                            <th>Descripción</th>
+                            <th>Valor</th>
+                            <th>Tipo</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <!--
+                          Ejemplo visual:
+                          <tr class="table-primary fw-bold">
+                            <td colspan="4">2111 - Servicios Generales (Total: $12,000)</td>
+                          </tr>
+                          <tr>
+                            <td>2111-01</td>
+                            <td>Limpieza</td>
+                            <td>$5,000</td>
+                            <td>Auxiliar</td>
+                          </tr>
+                          <tr>
+                            <td>2111-02</td>
+                            <td>Mantenimiento</td>
+                            <td>$7,000</td>
+                            <td>Auxiliar</td>
+                          </tr>
+                          <tr><td colspan="4" style="background:transparent;height:12px;border:none;"></td></tr>
+                          -->
+                          <!-- Aquí se insertarán los rubros principales y auxiliares dinámicamente -->
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -487,6 +608,107 @@
           <!-- [ Main Content ] end -->
         </div>
         <!-- Rubros Tab Pane end -->
+
+        <!-- Modificaciones Tab Pane start -->
+        <div class="tab-pane fade" id="modificaciones-tab-pane" role="tabpanel" aria-labelledby="modificaciones-tab" tabindex="0">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-header">
+                  <h3>Adiciones, Disminuciones, Traslados y Aplazamientos</h3>
+                  <p>Gestiona todos los movimientos que afectan el presupuesto: adiciones, disminuciones, traslados (entre rubros) y aplazamientos (dejan saldos quietos).</p>
+                </div>
+                <div class="card-body pc-component">
+                  <!-- Formulario AD -->
+                  <form id="formAdicionDisminucion" class="row gy-2 gx-3 align-items-end mb-4">
+                    <div class="col-md-2">
+                      <label for="tipoModAD" class="form-label">Tipo</label>
+                      <select class="form-select" id="tipoModAD" required>
+                        <option value="Adición">Adición</option>
+                        <option value="Disminución">Disminución</option>
+                      </select>
+                    </div>
+                    <div class="col-md-4">
+                      <label for="busquedaRubroAux" class="form-label">Buscar Rubro Auxiliar</label>
+                      <input type="text" class="form-control" id="busquedaRubroAux" placeholder="Código o descripción del rubro auxiliar">
+                      <div class="list-group position-absolute w-100 shadow-sm z-3" id="listaBusquedaRubros" style="max-height:180px;overflow-y:auto;display:none;"></div>
+                    </div>
+                    <div class="col-md-2">
+                      <label for="montoModAD" class="form-label">Monto</label>
+                      <input type="number" class="form-control" id="montoModAD" min="1" required>
+                    </div>
+                    <div class="col-md-2">
+                      <label for="soporteAD" class="form-label">Documento soporte</label>
+                      <input type="file" class="form-control" id="soporteAD" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+                    </div>
+                    <div class="col-md-2">
+                      <button type="submit" class="btn btn-primary w-100">Registrar</button>
+                    </div>
+                  </form>
+                  <!-- Formulario Traslado -->
+                  <form id="formTraslado" class="row gy-2 gx-3 align-items-end mb-4 border-top pt-4 mt-4">
+                    <div class="col-md-2">
+                      <label for="origenTraslado" class="form-label">Rubro Origen</label>
+                      <select class="form-select" id="origenTraslado" required></select>
+                    </div>
+                    <div class="col-md-2">
+                      <label for="destinoTraslado" class="form-label">Rubro Destino</label>
+                      <select class="form-select" id="destinoTraslado" required></select>
+                    </div>
+                    <div class="col-md-2">
+                      <label for="montoTraslado" class="form-label">Monto</label>
+                      <input type="number" class="form-control" id="montoTraslado" min="1" required>
+                    </div>
+                    <div class="col-md-3">
+                      <label for="soporteTraslado" class="form-label">Documento soporte</label>
+                      <input type="file" class="form-control" id="soporteTraslado" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+                    </div>
+                    <div class="col-md-3">
+                      <button type="submit" class="btn btn-warning w-100">Registrar Traslado</button>
+                    </div>
+                  </form>
+                  <!-- Formulario Aplazamiento -->
+                  <form id="formAplazamiento" class="row gy-2 gx-3 align-items-end mb-4 border-top pt-4 mt-4">
+                    <div class="col-md-3">
+                      <label for="rubroAplazamiento" class="form-label">Rubro a Aplazar</label>
+                      <select class="form-select" id="rubroAplazamiento" required></select>
+                    </div>
+                    <div class="col-md-2">
+                      <label for="montoAplazamiento" class="form-label">Monto</label>
+                      <input type="number" class="form-control" id="montoAplazamiento" min="1" required>
+                    </div>
+                    <div class="col-md-4">
+                      <label for="soporteAplazamiento" class="form-label">Documento soporte</label>
+                      <input type="file" class="form-control" id="soporteAplazamiento" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+                    </div>
+                    <div class="col-md-3">
+                      <button type="submit" class="btn btn-info w-100">Registrar Aplazamiento</button>
+                    </div>
+                  </form>
+                  <!-- Tabla de modificaciones -->
+                  <div class="table-responsive">
+                    <table class="table table-bordered align-middle mb-0" id="tablaAdicionesDisminuciones">
+                      <thead class="table-light">
+                        <tr>
+                          <th>Tipo</th>
+                          <th>Rubro Origen</th>
+                          <th>Rubro Destino</th>
+                          <th>Monto</th>
+                          <th>Fecha</th>
+                          <th>Soporte</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <!-- Modificaciones AD/Traslado/Aplazamiento se insertan aquí -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Modificaciones Tab Pane end -->
 
         <!-- Adiciones y Disminuciones Tab Pane start -->
         <div class="tab-pane fade" id="adiciones-disminuciones-tab-pane" role="tabpanel" aria-labelledby="adiciones-disminuciones-tab" tabindex="0">
@@ -532,29 +754,336 @@
 <script src="../assets/js/pcoded.js"></script>
 <script src="../assets/js/plugins/feather.min.js"></script>
 <script src="../../assets/js/menu-active.js"></script>
+<script>
+// Estructuras en memoria para rubros
+let rubrosPrincipales = [
+  {
+    codigo: '2112',
+    descripcion: 'SERVICIOS PERSONALES ASOCIADOS A LA NOMINA',
+    valor: 2250000000,
+    tipo: 'P. Gasto'
+  },
+  {
+    codigo: '2113',
+    descripcion: 'ADQUISICIÓN DE SERVICIOS OPERACIONALES',
+    valor: 12327010867,
+    tipo: 'P. Gasto'
+  }
+];
+let rubrosAuxiliares = [
+  {codigo: '211201', descripcion: 'Remuneración de servicios técnicos', valor: 21750635, tipo: 'P. Gasto', codigoPrincipal: '2112'},
+  {codigo: '211202', descripcion: 'Seguridad social salud', valor: 84799733, tipo: 'P. Gasto', codigoPrincipal: '2112'},
+  {codigo: '211203', descripcion: 'Salud Social Pensión', valor: 84799733, tipo: 'P. Gasto', codigoPrincipal: '2112'},
+  {codigo: '211204', descripcion: 'Administración de Riesgos laborales', valor: 7066644, tipo: 'P. Gasto', codigoPrincipal: '2112'},
+  {codigo: '211205', descripcion: 'Cesantías Definitivas', valor: 71058807, tipo: 'P. Gasto', codigoPrincipal: '2112'},
+  {codigo: '211206', descripcion: 'Caja de Compensación familiar', valor: 28266527, tipo: 'P. Gasto', codigoPrincipal: '2112'},
+  {codigo: '211207', descripcion: 'Honorarios y Consultoría', valor: 800000000, tipo: 'P. Gasto', codigoPrincipal: '2112'},
+  {codigo: '211208', descripcion: 'ICBF', valor: 21199933, tipo: 'P. Gasto', codigoPrincipal: '2112'},
+  {codigo: '211209', descripcion: 'SENA', valor: 14133288, tipo: 'P. Gasto', codigoPrincipal: '2112'},
+  {codigo: '211301', descripcion: 'Servicios de Software, infraestructura tecnológica', valor: 1925079918, tipo: 'P. Gasto', codigoPrincipal: '2113'},
+  {codigo: '211302', descripcion: 'Servicios de Software, infraestructura tecnológica y conectividad para instrumentalización registro y conectividad instrumentalización vehículos', valor: 4580698000, tipo: 'P. Gasto', codigoPrincipal: '2113'},
+  {codigo: '211303', descripcion: 'Servicios de Software, infraestructura tecnológica y conectividad para instrumentalización cobro', valor: 3684558000, tipo: 'P. Gasto', codigoPrincipal: '2113'},
+  {codigo: '211304', descripcion: 'Servicios de Software, infraestructura tecnológica y conectividad para instrumentalización sobretasa gasolina a motor', valor: 964000000, tipo: 'P. Gasto', codigoPrincipal: '2113'},
+  {codigo: '211305', descripcion: 'Servicios de Software, infraestructura tecnológica y conectividad para instrumentalización impuesto al consumo', valor: 750000000, tipo: 'P. Gasto', codigoPrincipal: '2113'},
+  {codigo: '211306', descripcion: 'Otros proyectos. Costos operativos por recuperación de cartera y', valor: 422674949, tipo: 'P. Gasto', codigoPrincipal: '2113'},
+];
 
+function renderTablaRubros() {
+  const tbody = document.querySelector('#tablaRubros tbody');
+  tbody.innerHTML = '';
+  // Ordenar principales y auxiliares por código ascendente
+  const principalesOrdenados = [...rubrosPrincipales].sort((a, b) => a.codigo.localeCompare(b.codigo));
+  const auxiliaresOrdenados = [...rubrosAuxiliares].sort((a, b) => a.codigo.localeCompare(b.codigo));
+  principalesOrdenados.forEach(principal => {
+    // Calcular valor actualizado como suma de auxiliares
+    const valorTotal = auxiliaresOrdenados.filter(aux => aux.codigo.startsWith(principal.codigo)).reduce((sum, aux) => sum + Number(aux.valor), 0) || principal.valor;
+    // Fila de rubro principal
+    const trPrincipal = document.createElement('tr');
+    trPrincipal.className = 'table-primary fw-bold';
+    trPrincipal.innerHTML = `<td colspan="4">${principal.codigo} - ${principal.descripcion} (Total: $${valorTotal.toLocaleString()}) <span class='badge bg-info ms-2'>${principal.tipo}</span></td>`;
+    tbody.appendChild(trPrincipal);
+    // Filas de auxiliares
+    auxiliaresOrdenados.filter(aux => aux.codigo.startsWith(principal.codigo)).forEach(aux => {
+      const trAux = document.createElement('tr');
+      trAux.innerHTML = `<td>${aux.codigo}</td><td>${aux.descripcion}</td><td>$${Number(aux.valor).toLocaleString()}</td><td>${aux.tipo} (Auxiliar)</td>`;
+      tbody.appendChild(trAux);
+    });
+    // Separador visual
+    const trSep = document.createElement('tr');
+    trSep.innerHTML = `<td colspan="4" style="background:transparent;height:12px;border:none;"></td>`;
+    tbody.appendChild(trSep);
+  });
+}
 
+document.getElementById('guardarPrincipal').onclick = function() {
+  const codigo = document.getElementById('codigoPrincipal').value.trim();
+  const descripcion = document.getElementById('descripcionPrincipal').value;
+  const tipo = document.getElementById('tipoPrincipal').value;
+  // Validación: código debe ser 4 dígitos numéricos
+  if(!/^\d{4}$/.test(codigo)) {
+    mostrarAlertaExito('El código debe ser un número de 4 dígitos');
+    return;
+  }
+  // Valor calculado: suma de auxiliares
+  const valor = rubrosAuxiliares.filter(aux => aux.codigo.startsWith(codigo)).reduce((sum, aux) => sum + Number(aux.valor), 0);
+  // Buscar si ya existe
+  const idx = rubrosPrincipales.findIndex(r => r.codigo === codigo);
+  if(idx !== -1) {
+    rubrosPrincipales[idx] = { codigo, descripcion, valor, tipo };
+  } else {
+    rubrosPrincipales.push({ codigo, descripcion, valor, tipo });
+  }
+  renderTablaRubros();
+  document.getElementById('modalRubroPrincipal').querySelector('.btn-close').click();
+  mostrarAlertaExito('Rubro Principal creado con éxito');
+};
 
+document.getElementById('guardarAuxiliar').onclick = function() {
+  const codigo = document.getElementById('codigoAuxiliar').value;
+  const descripcion = document.getElementById('descripcionAuxiliar').value;
+  const valor = document.getElementById('valorAuxiliar').value;
+  const tipo = document.getElementById('tipoAuxiliar').value;
+  // Determinar código principal
+  const codigoPrincipal = codigo.split('-')[0];
+  // Agregar auxiliar
+  rubrosAuxiliares.push({ codigo, descripcion, valor, tipo, codigoPrincipal });
+  // Actualizar valor del principal
+  const principal = rubrosPrincipales.find(r => r.codigo === codigoPrincipal);
+  if(principal) {
+    principal.valor = rubrosAuxiliares.filter(aux => aux.codigo.startsWith(codigoPrincipal)).reduce((sum, aux) => sum + Number(aux.valor), 0);
+  }
+  renderTablaRubros();
+  document.getElementById('modalRubroAuxiliar').querySelector('.btn-close').click();
+  mostrarAlertaExito('Rubro Auxiliar creado con éxito');
+};
 
+function mostrarAlertaExito(mensaje) {
+  const alertDiv = document.getElementById('alertRubroExito');
+  const mensajeSpan = document.getElementById('mensajeRubroExito');
+  mensajeSpan.textContent = mensaje;
+  alertDiv.classList.remove('d-none');
+  alertDiv.style.opacity = 1;
+  setTimeout(() => {
+    alertDiv.style.transition = 'opacity 0.6s';
+    alertDiv.style.opacity = 0;
+    setTimeout(() => {
+      alertDiv.classList.add('d-none');
+      alertDiv.style.opacity = 1;
+      alertDiv.style.transition = '';
+    }, 600);
+  }, 2000);
+}
 
-<script>layout_change('light');</script>
+// --- Adiciones y Disminuciones sobre rubros auxiliares ---
+let adicionesDisminuciones = [];
+let rubroAuxSeleccionado = null;
 
+const busquedaInput = document.getElementById('busquedaRubroAux');
+const listaBusqueda = document.getElementById('listaBusquedaRubros');
 
+busquedaInput.addEventListener('input', function() {
+  const query = this.value.trim().toLowerCase();
+  listaBusqueda.innerHTML = '';
+  if (!query) {
+    listaBusqueda.style.display = 'none';
+    rubroAuxSeleccionado = null;
+    return;
+  }
+  const resultados = rubrosAuxiliares.filter(rubro =>
+    rubro.codigo.toLowerCase().includes(query) ||
+    rubro.descripcion.toLowerCase().includes(query)
+  );
+  if (resultados.length === 0) {
+    listaBusqueda.style.display = 'none';
+    rubroAuxSeleccionado = null;
+    return;
+  }
+  resultados.forEach(rubro => {
+    const item = document.createElement('button');
+    item.type = 'button';
+    item.className = 'list-group-item list-group-item-action';
+    item.textContent = `${rubro.codigo} - ${rubro.descripcion}`;
+    item.onclick = () => {
+      busquedaInput.value = `${rubro.codigo} - ${rubro.descripcion}`;
+      rubroAuxSeleccionado = rubro;
+      listaBusqueda.style.display = 'none';
+    };
+    listaBusqueda.appendChild(item);
+  });
+  listaBusqueda.style.display = 'block';
+});
 
+// Cierra la lista si se hace click fuera
+busquedaInput.addEventListener('blur', function() {
+  setTimeout(() => { listaBusqueda.style.display = 'none'; }, 200);
+});
 
-<script>change_box_container('false');</script>
+// Registrar adición/disminución
+const formAD = document.getElementById('formAdicionDisminucion');
+formAD.onsubmit = function(e) {
+  e.preventDefault();
+  const tipo = document.getElementById('tipoModAD').value;
+  const monto = Number(document.getElementById('montoModAD').value);
+  const soporte = document.getElementById('soporteAD').files[0];
+  if (!rubroAuxSeleccionado) {
+    alert('Seleccione un rubro auxiliar válido.');
+    return;
+  }
+  if (!monto || monto <= 0) {
+    alert('Ingrese un monto mayor a cero.');
+    return;
+  }
+  // Modificar el valor del rubro auxiliar
+  const idx = rubrosAuxiliares.findIndex(r => r.codigo === rubroAuxSeleccionado.codigo);
+  if (idx !== -1) {
+    if (tipo === 'Adición') {
+      rubrosAuxiliares[idx].valor = Number(rubrosAuxiliares[idx].valor) + monto;
+    } else if (tipo === 'Disminución') {
+      rubrosAuxiliares[idx].valor = Math.max(0, Number(rubrosAuxiliares[idx].valor) - monto);
+    }
+    rubroAuxSeleccionado.valor = rubrosAuxiliares[idx].valor;
+  }
+  adicionesDisminuciones.push({
+    tipo,
+    rubroOrigen: { ...rubroAuxSeleccionado },
+    rubroDestino: null,
+    monto,
+    fecha: new Date().toLocaleString(),
+    soporte: soporte ? soporte.name : ''
+  });
+  renderTablaAdicionesDisminuciones();
+  renderTablaRubros();
+  formAD.reset();
+  rubroAuxSeleccionado = null;
+};
 
+// --- Traslados ---
+function llenarSelectRubros(selectId, excludeCodigo = null) {
+  const select = document.getElementById(selectId);
+  select.innerHTML = '<option value="">Seleccione...</option>';
+  rubrosAuxiliares.forEach(rubro => {
+    if (!excludeCodigo || rubro.codigo !== excludeCodigo) {
+      const opt = document.createElement('option');
+      opt.value = rubro.codigo;
+      opt.textContent = `${rubro.codigo} - ${rubro.descripcion}`;
+      select.appendChild(opt);
+    }
+  });
+}
+document.getElementById('origenTraslado').addEventListener('change', function() {
+  llenarSelectRubros('destinoTraslado', this.value);
+});
+llenarSelectRubros('origenTraslado');
+llenarSelectRubros('destinoTraslado');
 
+const formTras = document.getElementById('formTraslado');
+formTras.onsubmit = function(e) {
+  e.preventDefault();
+  const origen = document.getElementById('origenTraslado').value;
+  const destino = document.getElementById('destinoTraslado').value;
+  const monto = Number(document.getElementById('montoTraslado').value);
+  const soporte = document.getElementById('soporteTraslado').files[0];
+  if (!origen || !destino || origen === destino) {
+    alert('Seleccione rubros válidos de origen y destino.');
+    return;
+  }
+  if (!monto || monto <= 0) {
+    alert('Ingrese un monto mayor a cero.');
+    return;
+  }
+  const idxOrigen = rubrosAuxiliares.findIndex(r => r.codigo === origen);
+  const idxDestino = rubrosAuxiliares.findIndex(r => r.codigo === destino);
+  if (idxOrigen === -1 || idxDestino === -1) {
+    alert('Rubros seleccionados no válidos.');
+    return;
+  }
+  if (Number(rubrosAuxiliares[idxOrigen].valor) < monto) {
+    alert('Saldo insuficiente en el rubro de origen.');
+    return;
+  }
+  rubrosAuxiliares[idxOrigen].valor = Number(rubrosAuxiliares[idxOrigen].valor) - monto;
+  rubrosAuxiliares[idxDestino].valor = Number(rubrosAuxiliares[idxDestino].valor) + monto;
+  adicionesDisminuciones.push({
+    tipo: 'Traslado',
+    rubroOrigen: { ...rubrosAuxiliares[idxOrigen] },
+    rubroDestino: { ...rubrosAuxiliares[idxDestino] },
+    monto,
+    fecha: new Date().toLocaleString(),
+    soporte: soporte ? soporte.name : ''
+  });
+  renderTablaAdicionesDisminuciones();
+  renderTablaRubros();
+  formTras.reset();
+};
 
-<script>layout_rtl_change('false');</script>
+// --- Aplazamientos ---
+llenarSelectRubros('rubroAplazamiento');
+const formApl = document.getElementById('formAplazamiento');
+formApl.onsubmit = function(e) {
+  e.preventDefault();
+  const rubro = document.getElementById('rubroAplazamiento').value;
+  const monto = Number(document.getElementById('montoAplazamiento').value);
+  const soporte = document.getElementById('soporteAplazamiento').files[0];
+  if (!rubro) {
+    alert('Seleccione un rubro a aplazar.');
+    return;
+  }
+  if (!monto || monto <= 0) {
+    alert('Ingrese un monto mayor a cero.');
+    return;
+  }
+  const idx = rubrosAuxiliares.findIndex(r => r.codigo === rubro);
+  if (idx === -1) {
+    alert('Rubro seleccionado no válido.');
+    return;
+  }
+  if (Number(rubrosAuxiliares[idx].valor) < monto) {
+    alert('Saldo insuficiente para aplazamiento.');
+    return;
+  }
+  // Aquí podrías marcar el monto como "aplazado" (requiere lógica adicional si se desea liberar luego)
+  rubrosAuxiliares[idx].valor = Number(rubrosAuxiliares[idx].valor) - monto;
+  adicionesDisminuciones.push({
+    tipo: 'Aplazamiento',
+    rubroOrigen: { ...rubrosAuxiliares[idx] },
+    rubroDestino: null,
+    monto,
+    fecha: new Date().toLocaleString(),
+    soporte: soporte ? soporte.name : ''
+  });
+  renderTablaAdicionesDisminuciones();
+  renderTablaRubros();
+  formApl.reset();
+};
 
+function renderTablaAdicionesDisminuciones() {
+  const tbody = document.querySelector('#tablaAdicionesDisminuciones tbody');
+  tbody.innerHTML = '';
+  adicionesDisminuciones.forEach(mod => {
+    const rubroOrigen = mod.rubroOrigen ? `${mod.rubroOrigen.codigo} - ${mod.rubroOrigen.descripcion}` : '';
+    const rubroDestino = mod.rubroDestino ? `${mod.rubroDestino.codigo} - ${mod.rubroDestino.descripcion}` : '';
+    const soporte = mod.soporte ? `<a href="#" title="Soporte cargado">${mod.soporte}</a>` : '';
+    const tipoColor = mod.tipo === 'Adición' ? 'success' : mod.tipo === 'Disminución' ? 'danger' : mod.tipo === 'Traslado' ? 'warning' : 'info';
+    const tipoBadge = `<span class='badge bg-${tipoColor}'>${mod.tipo}</span>`;
+    const fecha = mod.fecha || '';
+    const monto = `$${Number(mod.monto).toLocaleString()}`;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${tipoBadge}</td>
+      <td>${rubroOrigen}</td>
+      <td>${rubroDestino}</td>
+      <td>${monto}</td>
+      <td>${fecha}</td>
+      <td>${soporte}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
 
-<script>preset_change("preset-1");</script>
-
-
-<script>font_change("Public-Sans");</script>
-
-
+// Render inicial con los valores de ejemplo
+renderTablaRubros();
+renderTablaAdicionesDisminuciones();
+</script>
 </body>
 <!-- [Body] end -->
 

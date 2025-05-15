@@ -1,0 +1,30 @@
+functionsDirectory = "C:\\DEV_Projects\\sis_con AP\\netlify\\functions"
+functionsDirectoryOrigin = "ui"
+plugins = []
+headers = []
+redirects = []
+
+[functions]
+
+[functions."*"]
+
+[build]
+publish = "C:\\DEV_Projects\\sis_con AP\\dist"
+publishOrigin = "config"
+commandOrigin = "config"
+command = "gulp"
+functions = "C:\\DEV_Projects\\sis_con AP\\netlify\\functions"
+
+[build.environment]
+
+[build.processing]
+
+[build.processing.css]
+
+[build.processing.html]
+
+[build.processing.images]
+
+[build.processing.js]
+
+[build.services]

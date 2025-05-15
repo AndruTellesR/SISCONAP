@@ -103,19 +103,3 @@ typings/
 
 # TernJS port file
 .tern-port
-
-# Python virtual environment for backend
-backend/venv/
-
-# Python bytecode and cache
-__pycache__/
-*.pyc
-
-# Django specific
-backend/db.sqlite3
-
-# Windsurf deployment configuration file (auto-generated)
-windsurf_deployment.yaml
-
-# Local Netlify folder
-.netlify
