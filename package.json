@@ -12,7 +12,6 @@
     "@babel/core": "^7.22.5",
     "@babel/preset-env": "^7.22.5",
     "del": "^6.1.1",
-    "gulp": "^4.0.2",
     "gulp-autoprefixer": "^8.0.0",
     "gulp-babel": "^8.0.0",
     "gulp-cssbeautify": "^3.0.1",
@@ -28,6 +27,7 @@
     "sass": "^1.63.4"
   },
   "dependencies": {
+    "gulp": "^4.0.2",
     "@ckeditor/ckeditor5-build-balloon": "^38.0.1",
     "@ckeditor/ckeditor5-build-classic": "^38.0.1",
     "@ckeditor/ckeditor5-build-decoupled-document": "^38.0.1",
