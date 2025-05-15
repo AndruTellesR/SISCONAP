@@ -116,3 +116,6 @@ backend/db.sqlite3
 
 # Windsurf deployment configuration file (auto-generated)
 windsurf_deployment.yaml
+
+# Local Netlify folder
+.netlify
