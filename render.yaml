@@ -1,26 +1,21 @@
 services:
   - type: web
-    name: siscon-ap
-    env: node
+    name: sisconap
+    env: python
     buildCommand: |
-      npm config set registry https://registry.npmjs.org/
-      npm config set @gridstack:registry https://registry.npmjs.org/
-      npm install --legacy-peer-deps
-      npm run build
-    startCommand: node server.js
+      pip install -r backend/requirements.txt
+      python backend/manage.py collectstatic --noinput
+    startCommand: gunicorn siscon_project.wsgi:application
+    rootDirectory: backend
     envVars:
-      - key: NODE_VERSION
-        value: 18.x
-      - key: NPM_CONFIG_REGISTRY
-        value: "https://registry.npmjs.org/"
-      - key: NPM_CONFIG_LEGACY_PEER_DEPS
-        value: "true"
-      - key: NPM_CONFIG_AUDIT
-        value: "false"
-      - key: NPM_CONFIG_FUND
-        value: "false"
-      - key: NPM_CONFIG_UPDATE_NOTIFIER
-        value: "false"
-      - key: NPM_CONFIG_PREFER_OFFLINE
-        value: "true"
+      - key: PYTHON_VERSION
+        value: 3.10
+      - key: DJANGO_SETTINGS_MODULE
+        value: siscon_project.settings
+      - key: DEBUG
+        value: "False"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4
     plan: free
