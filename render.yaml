@@ -2,11 +2,13 @@ services:
   - type: web
     name: siscon-ap
     env: node
-    buildCommand: npm install && npm run build
+    buildCommand: npm install --legacy-peer-deps && npm run build
     startCommand: node server.js
     envVars:
       - key: NODE_VERSION
         value: 18.x
       - key: NPM_CONFIG_USE_YARN
         value: "false"
+      - key: NPM_CONFIG_LEGACY_PEER_DEPS
+        value: "true"
     plan: free
