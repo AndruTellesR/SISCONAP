@@ -1,13 +1,15 @@
 {
   "name": "mantis-free-bootstrap-admin-template",
   "version": "1.0.0",
-  "description": "Mantis Free Bootstrap 5 Admin Dashboard Template",
-  "main": "index.js",
+  "description": "SISCON AP - Sistema de Control de Activos Fijos",
+  "main": "server.js",
   "license": "MIT",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "AP SYSTEM",
+  "homepage": "/",
+  "private": true,
   "devDependencies": {
     "@babel/core": "^7.22.5",
     "@babel/preset-env": "^7.22.5",
@@ -29,6 +31,8 @@
     "sass": "^1.63.4"
   },
   "dependencies": {
+    "express": "^4.18.2",
+    "path": "^0.12.7",
     "@ckeditor/ckeditor5-build-balloon": "^38.0.1",
     "@ckeditor/ckeditor5-build-classic": "^38.0.1",
     "@ckeditor/ckeditor5-build-decoupled-document": "^38.0.1",

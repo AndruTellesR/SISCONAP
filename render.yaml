@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: siscon-ap
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: node server.js
+    envVars:
+      - key: NODE_VERSION
+        value: 18.x
+    plan: free
