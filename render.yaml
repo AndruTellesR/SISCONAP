@@ -7,4 +7,6 @@ services:
     envVars:
       - key: NODE_VERSION
         value: 18.x
+      - key: NPM_CONFIG_USE_YARN
+        value: "false"
     plan: free
